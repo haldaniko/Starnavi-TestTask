@@ -1,0 +1,190 @@
+[
+  {
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+      "password": "securePass!2024",
+      "first_name": "Alice",
+      "last_name": "Smith",
+      "email": "alice.smith@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+      "password": "securePass!2024",
+      "first_name": "Bob",
+      "last_name": "Johnson",
+      "email": "bob.johnson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+      "password": "securePass!2024",
+      "first_name": "Charlie",
+      "last_name": "Williams",
+      "email": "charlie.williams@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 1,
+    "fields": {
+      "title": "How to Learn Python",
+      "content": "Learning Python can be fun and rewarding! Start with the basics, practice regularly, and build projects.",
+      "author": 1,
+      "created_at": "2024-10-01T12:00:00Z",
+      "updated_at": "2024-10-01T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 2,
+    "fields": {
+      "title": "Django for Beginners",
+      "content": "Django is a powerful web framework for Python. Start by setting up your environment and creating a simple app.",
+      "author": 2,
+      "created_at": "2024-10-02T12:00:00Z",
+      "updated_at": "2024-10-02T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.post",
+    "pk": 3,
+    "fields": {
+      "title": "Understanding REST APIs",
+      "content": "REST APIs allow different systems to communicate. Learn how to create and consume APIs in your applications.",
+      "author": 3,
+      "created_at": "2024-10-03T12:00:00Z",
+      "updated_at": "2024-10-03T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 1,
+    "fields": {
+      "post": 1,
+      "author": 2,
+      "content": "Great tips! I've been wanting to start learning Python.",
+      "created_at": "2024-10-04T12:00:00Z",
+      "updated_at": "2024-10-04T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 2,
+    "fields": {
+      "post": 1,
+      "author": 3,
+      "content": "I find Python very easy to learn.",
+      "created_at": "2024-10-04T12:30:00Z",
+      "updated_at": "2024-10-04T12:30:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 3,
+    "fields": {
+      "post": 2,
+      "author": 2,
+      "content": "Django is amazing! I love building web applications with it.",
+      "created_at": "2024-10-05T12:00:00Z",
+      "updated_at": "2024-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 4,
+    "fields": {
+      "post": 1,
+      "author": 2,
+      "content": "I found this post very helpful.",
+      "created_at": "2024-10-05T12:00:00Z",
+      "updated_at": "2024-10-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 5,
+    "fields": {
+      "post": 1,
+      "author": 1,
+      "content": "Great insights on Python!",
+      "created_at": "2024-10-05T12:15:00Z",
+      "updated_at": "2024-10-05T12:15:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 6,
+    "fields": {
+      "post": 2,
+      "author": 3,
+      "content": "Django is indeed powerful. Thanks for sharing!",
+      "created_at": "2024-10-06T12:00:00Z",
+      "updated_at": "2024-10-06T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 7,
+    "fields": {
+      "post": 2,
+      "author": 2,
+      "content": "I'm just getting started with Django!",
+      "created_at": "2024-10-06T12:30:00Z",
+      "updated_at": "2024-10-06T12:30:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 8,
+    "fields": {
+      "post": 3,
+      "author": 1,
+      "content": "The explanations were clear and concise.",
+      "created_at": "2024-10-07T12:00:00Z",
+      "updated_at": "2024-10-07T12:00:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 9,
+    "fields": {
+      "post": 3,
+      "author": 2,
+      "content": "Looking forward to implementing APIs in my projects!",
+      "created_at": "2024-10-07T12:45:00Z",
+      "updated_at": "2024-10-07T12:45:00Z"
+    }
+  },
+  {
+    "model": "posts.comment",
+    "pk": 10,
+    "fields": {
+      "post": 3,
+      "author": 3,
+      "content": "This article is a game changer for my understanding of REST.",
+      "created_at": "2024-10-08T12:00:00Z",
+      "updated_at": "2024-10-08T12:00:00Z"
+    }
+  }
+]
