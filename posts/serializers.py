@@ -17,6 +17,33 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ("author", "is_blocked")
 
 
+class PostListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            "id",
+            "title",
+            "author",
+            "is_blocked",
+        )
+
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(read_only=True, source="author.username")
+
+    class Meta:
+        model = Post
+        fields = (
+            "id",
+            "title",
+            "content",
+            "author",
+            "is_blocked",
+            "created_at",
+            "updated_at"
+        )
+
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
