@@ -68,3 +68,39 @@ class PostViewSet(BaseViewSet):
 class CommentViewSet(BaseViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class CommentsDailyBreakdown(APIView):
+    """
+    API View to get the daily breakdown of comments, including total comments and blocked comments per day.
+    """
+    pagination_class = PageNumberPagination
+
+    def get(self, request):
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+
+        if not date_from or not date_to:
+            return Response({"error": "Please provide both 'date_from' and 'date_to' query parameters."}, status=400)
+
+        date_from = parse_date(date_from)
+        date_to = parse_date(date_to)
+
+        if not date_from or not date_to:
+            return Response({"error": "Invalid date format. Please use YYYY-MM-DD."}, status=400)
+
+        comments_data = (
+            Comment.objects.filter(created_at__date__range=[date_from, date_to])
+            .annotate(date=TruncDate('created_at'))
+            .values('date')
+            .annotate(
+                total_comments=Count('id'),
+                blocked_comments=Count('id', filter=Q(is_blocked=True))
+            )
+            .order_by('date')
+        )
+
+        paginator = self.pagination_class()
+        paginated_data = paginator.paginate_queryset(comments_data, request)
+
+        return paginator.get_paginated_response(paginated_data)
