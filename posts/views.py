@@ -6,9 +6,11 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.exceptions import NotFound
 
 from .models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer, PostDetailSerializer, PostListSerializer
 from profanity_check import predict
 
 
@@ -64,10 +66,40 @@ class PostViewSet(BaseViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return PostDetailSerializer
+        if self.action == "list":
+            return PostListSerializer
+        return PostSerializer
 
-class CommentViewSet(BaseViewSet):
-    queryset = Comment.objects.all()
+
+class CommentListCreateView(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        post_id = self.kwargs['post_id']
+        try:
+            post = Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            raise NotFound('Post not found.')
+
+        return post.comments.filter(is_blocked=False)
+
+    def perform_create(self, serializer):
+        post_id = self.kwargs['post_id']
+        post = Post.objects.get(id=post_id)
+        serializer.save(author=self.request.user, post=post)
+
+
+class CommentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
 
 
 class CommentsDailyBreakdown(APIView):
