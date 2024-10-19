@@ -26,7 +26,8 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "author",
             "is_blocked",
+            "parent_comment",
             "created_at",
             "updated_at"
         )
-        read_only_fields = ("author", "is_blocked",)
+        read_only_fields = ("author", "is_blocked", "parent_comment")
