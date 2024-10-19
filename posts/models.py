@@ -27,6 +27,7 @@ class Comment(models.Model):
     )
     content = models.TextField()
     is_blocked = models.BooleanField(default=False)
+    is_auto_reply = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
