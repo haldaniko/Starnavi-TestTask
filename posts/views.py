@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.exceptions import NotFound
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer, PostDetailSerializer, PostListSerializer
@@ -102,6 +103,52 @@ class CommentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         super().perform_destroy(instance)
 
 
+@extend_schema(
+    operation_id="comments_daily_breakdown",
+    summary="Retrieve daily breakdown of comments",
+    description=(
+            """This API endpoint provides a daily breakdown of comments within a specified date range, including the
+            total number of comments and blocked comments per day. The request must include the
+            'date_from' and 'date_to' query parameters in the format YYYY-MM-DD."""
+    ),
+    parameters=[
+        OpenApiParameter(
+            name="date_from",
+            description="The start date of the range (inclusive) in YYYY-MM-DD format.",
+            required=True,
+            type=str,
+        ),
+        OpenApiParameter(
+            name="date_to",
+            description="The end date of the range (inclusive) in YYYY-MM-DD format.",
+            required=True,
+            type=str,
+        ),
+    ],
+    responses={
+        200: OpenApiExample(
+            "Successful response",
+            value=[
+                {
+                    "date": "2024-02-02",
+                    "total_comments": 12,
+                    "blocked_comments": 3,
+                },
+                {
+                    "date": "2024-02-03",
+                    "total_comments": 5,
+                    "blocked_comments": 0,
+                },
+            ],
+            response_only=True,
+        ),
+        400: OpenApiExample(
+            "Bad request due to missing or invalid date parameters",
+            value={"error": "Please provide both 'date_from' and 'date_to' query parameters."},
+            response_only=True,
+        ),
+    }
+)
 class CommentsDailyBreakdown(APIView):
     """
     API View to get the daily breakdown of comments, including total comments and blocked comments per day.
