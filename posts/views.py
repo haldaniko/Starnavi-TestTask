@@ -3,11 +3,11 @@ from django.db.models.functions import TruncDate
 from django.utils.dateparse import parse_date
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 from .models import Post, Comment
@@ -24,6 +24,28 @@ class PostViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return PostListSerializer
         return PostSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            raise PermissionDenied("You do not have permission to edit this post.")
+
+        serializer = self.get_serializer(post, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            raise PermissionDenied("You do not have permission to delete this post.")
+
+        self.perform_destroy(post)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CommentListCreateView(ListCreateAPIView):
@@ -52,6 +74,23 @@ class CommentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
+
+    def update(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.author != request.user:
+            raise PermissionDenied("You do not have permission to edit this comment.")
+        serializer = self.get_serializer(comment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.author != request.user:
+            raise PermissionDenied("You do not have permission to delete this comment.")
+        self.perform_destroy(comment)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(
@@ -104,6 +143,7 @@ class CommentsDailyBreakdown(APIView):
     """
     API View to get the daily breakdown of comments, including total comments and blocked comments per day.
     """
+    permission_classes = [IsAdminUser]
     pagination_class = PageNumberPagination
 
     def get(self, request):

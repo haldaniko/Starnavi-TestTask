@@ -18,7 +18,7 @@ class PostSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at"
         )
-        read_only_fields = ("author", "is_blocked")
+        read_only_fields = ("author", "is_blocked", "created_at", "updated_at")
 
     def validate(self, data):
         if validate_profanity(data.get('title', '')) or validate_profanity(data.get('content', '')):
