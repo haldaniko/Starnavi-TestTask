@@ -3,10 +3,11 @@
     "model": "user.user",
     "pk": 1,
     "fields": {
+      "username": "Assistant",
       "password": "securePass!2024",
-      "first_name": "Alice",
-      "last_name": "Smith",
-      "email": "alice.smith@example.com",
+      "first_name": "AI",
+      "last_name": "Helper",
+      "email": "ai.helper@example.com",
       "is_staff": false,
       "is_active": true,
       "is_superuser": false,
@@ -18,6 +19,7 @@
     "model": "user.user",
     "pk": 2,
     "fields": {
+      "username": "BobJohnson",
       "password": "securePass!2024",
       "first_name": "Bob",
       "last_name": "Johnson",
@@ -33,6 +35,7 @@
     "model": "user.user",
     "pk": 3,
     "fields": {
+      "username": "CharlieWilliams",
       "password": "securePass!2024",
       "first_name": "Charlie",
       "last_name": "Williams",
