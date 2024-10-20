@@ -16,3 +16,5 @@ urlpatterns = [
     path('comments/<int:pk>/', CommentRetrieveUpdateDestroyView.as_view(), name='post-comment-detail'),
     path('comments-daily-breakdown/', CommentsDailyBreakdown.as_view(), name='comments-daily-breakdown'),
 ]
+
+app_name = "posts"
