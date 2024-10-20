@@ -15,53 +15,70 @@ from user.models import User
 class CommentsDailyBreakdownTest(APITestCase):
 
     def setUp(self):
-        user = User.objects.create(username='testuser', password='testpassword')
+        self.user = User.objects.create(
+            username='testuser',
+            password='testpassword',
+            is_staff=True
+        )
+        self.client.login(username='testuser', password='testpassword')
+        self.token = RefreshToken.for_user(self.user).access_token
+
         post = Post.objects.create(
             title='title',
             content='content',
             created_at=datetime(2023, 10, 15),
-            author=user,
+            author=self.user,
             is_blocked=False)
         Comment.objects.create(
             content="First comment",
             created_at=datetime(2023, 10, 15),
             is_blocked=False,
-            author=user,
+            author=self.user,
             post_id=post.id
         )
         Comment.objects.create(
             content="Second comment",
             created_at=datetime(2023, 10, 16),
             is_blocked=True,
-            author=user,
+            author=self.user,
             post_id=post.id
         )
         Comment.objects.create(
             content="Third comment",
             created_at=datetime(2023, 10, 17),
             is_blocked=False,
-            author=user,
+            author=self.user,
             post_id=post.id
         )
 
     def test_comments_daily_breakdown_success(self):
         url = reverse('posts:comments-daily-breakdown')
-        response = self.client.get(url, {'date_from': '2000-01-01', 'date_to': '2055-01-01'})
-
+        response = self.client.get(
+            url,
+            {'date_from': '2000-01-01', 'date_to': '2055-01-01'},
+            HTTP_AUTHORIZATION=f'Bearer {self.token}'
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['results'][0]['total_comments'], 3)
         self.assertEqual(response.data['results'][0]['blocked_comments'], 1)
 
     def test_comments_daily_breakdown_missing_dates(self):
         url = reverse('posts:comments-daily-breakdown')
-        response = self.client.get(url)
+        response = self.client.get(
+            url,
+            HTTP_AUTHORIZATION=f'Bearer {self.token}'
+        )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], "Please provide both 'date_from' and 'date_to' query parameters.")
 
     def test_comments_daily_breakdown_invalid_dates(self):
         url = reverse('posts:comments-daily-breakdown')
-        response = self.client.get(url, {'date_from': 'invalid-date', 'date_to': 'invalid-date'})
+        response = self.client.get(
+            url,
+            {'date_from': 'invalid-date', 'date_to': 'invalid-date'},
+            HTTP_AUTHORIZATION=f'Bearer {self.token}'
+        )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error'], "Invalid date format. Please use YYYY-MM-DD.")
@@ -99,11 +116,11 @@ class CreatePostTest(APITestCase):
 
     def test_update_post_success(self):
         post = Post.objects.create(
-                        title='title',
-                        content='content',
-                        created_at=datetime(2023, 10, 15),
-                        author=self.user,
-                        is_blocked=False
+            title='title',
+            content='content',
+            created_at=datetime(2023, 10, 15),
+            author=self.user,
+            is_blocked=False
         )
         url = reverse('posts:post-detail', kwargs={'pk': post.pk})
         data = {
