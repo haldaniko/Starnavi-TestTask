@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
 
     # My apps
     'user',
@@ -97,6 +98,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5
 }
@@ -106,4 +108,16 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Test task by Daniil Halytskyi for Starnavi',
+    'DESCRIPTION': """This API provides a comprehensive solution for managing posts and comments within a blog
+                   environment. It includes user registration, authentication, and advanced features such as AI
+                   moderation for content filtering and automatic responses to comments. Designed with FastAPI
+                   this API aims to enhance user interaction while ensuring a safe and engaging platform. Detailed
+                   analytics for comment activity is also available, allowing for effective monitoring and engagement
+                   strategies.""",
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
 }
