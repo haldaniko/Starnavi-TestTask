@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from .models import Post, Comment
+from .validators import validate_profanity
 
 
 class PostSerializer(serializers.ModelSerializer):
+    title = serializers.CharField()
+    content = serializers.CharField()
+
     class Meta:
         model = Post
         fields = (
@@ -15,6 +19,13 @@ class PostSerializer(serializers.ModelSerializer):
             "updated_at"
         )
         read_only_fields = ("author", "is_blocked")
+
+    def validate(self, data):
+        if validate_profanity(data.get('title', '')) or validate_profanity(data.get('content', '')):
+            data['is_blocked'] = True
+        else:
+            data['is_blocked'] = False
+        return data
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -45,6 +56,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    content = serializers.CharField()
+
     class Meta:
         model = Comment
         fields = (
@@ -58,3 +71,10 @@ class CommentSerializer(serializers.ModelSerializer):
             "updated_at"
         )
         read_only_fields = ("author", "is_blocked", "parent_comment")
+
+    def validate(self, data):
+        if validate_profanity(data.get('content', '')):
+            data['is_blocked'] = True
+        else:
+            data['is_blocked'] = False
+        return data

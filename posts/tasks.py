@@ -25,7 +25,7 @@ def auto_reply_to_comment(comment_id):
         post = comment.post
         user_settings = post.author.settings
 
-        if user_settings.auto_reply_enabled:
+        if user_settings.auto_reply_enabled and not comment.is_blocked:
             ai_reply = get_ai_response(comment.content)
 
             if ai_reply:
