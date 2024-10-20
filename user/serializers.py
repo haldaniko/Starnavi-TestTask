@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from django.utils.translation import gettext as _
 
+from user.models import UserSettings
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,6 +31,17 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+
+class UserSettingsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(read_only=True, source="user.username")
+
+    class Meta:
+        model = UserSettings
+        fields = ("id",
+                  "username",
+                  "auto_reply_enabled",
+                  "auto_reply_delay")
 
 
 class AuthTokenSerializer(serializers.Serializer):
