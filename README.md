@@ -12,7 +12,7 @@ A Django-based web application designed to manage posts and comments with AI mod
 ## Installation
 #### Docker 
 ```
-git clone `https://github.com/haldaniko/Starnavi-TeskTask.git`
+git clone https://github.com/haldaniko/Starnavi-TestTask.git`
 cd Starnavi-TeskTask
 
 (Copy .env.sample to .env and populate it with all required data)
@@ -22,7 +22,7 @@ docker-compose up
 ```
 #### Manual
 ```
-git clone `https://github.com/haldaniko/Starnavi-TeskTask.git`
+git clone `https://github.com/haldaniko/Starnavi-TestTask.git`
 cd Starnavi-TeskTask
 
 # on macOS
